@@ -13,7 +13,7 @@ profile:
 news: false  # includes a list of news items
 latest_posts: false  # includes a list of the newest posts
 selected_papers: false # includes a list of papers marked as "selected={true}"
-social: false  # includes social icons at the bottom of the page
+social: true  # includes social icons at the bottom of the page
 ---
 
 I'm a recent graduate from MIT with Bachelor's degrees in Math & CS as well as a Master's in CS. I'm broadly interested in machine learning methods and evaluations that may engender more helpful, equitable, and harm-reducing outcomes for all stakeholders of frontier AI systems.
