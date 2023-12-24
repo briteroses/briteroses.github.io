@@ -6,11 +6,13 @@ description:
 nav: true
 nav_order: 1
 ---
-<!-- _pages/publications.md -->
+<!-- _bibliography/papers -->
 <div class="publications">
 {% bibliography -f papers %}
 </div>
 
-<div class="preprints">
+<!-- _bibliography/preprints -->
+<h1> preprints </h1>
+<div class="publications">
 {% bibliography -f preprints %}
 </div>
