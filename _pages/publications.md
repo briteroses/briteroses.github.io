@@ -8,11 +8,11 @@ nav_order: 1
 ---
 <!-- _bibliography/papers -->
 <div class="publications">
-{% bibliography -f papers %}
+{% bibliography -f papers -q @*[displaytype=paper]* %}
 </div>
 
 <!-- _bibliography/preprints -->
 <h1> preprints </h1>
 <div class="publications">
-{% bibliography -f preprints %}
+{% bibliography -f papers -q @*[displaytype=preprint]* %}
 </div>
