@@ -8,9 +8,9 @@ nav_order: 1
 ---
 <!-- _pages/publications.md -->
 <div class="publications">
-{% bibliography -f papers {{ site.scholar.bibliography }} %}
+{% bibliography -f papers %}
 </div>
 
 <div class="preprints">
-{% bibliography -f preprints {{ site.scholar.bibliography }} %}
+{% bibliography -f preprints %}
 </div>
