@@ -2,7 +2,7 @@
 ---
 <!-- _layouts/bib.html -->
       <div class="row">
-        {%- if site.enable_publication_thumbnails -%}
+        {%- if site.enable_publication_thumbnails & entry.displaytype != misc -%}
         <div class="col-sm-2 {% if entry.preview %}preview{% else %}abbr{% endif %}">
         {%- if entry.preview -%}
           {% if entry.preview contains '://' -%}
