@@ -191,6 +191,10 @@
             <a href="{{ entry.openreview }}" class="btn btn-sm z-depth-0" role="button">OpenReview</a>
           {%- endif %}
           </div>
+          {%- if entry.prenote %}
+            <br>
+            {{ entry.prenote }}
+          {%- endif %}
           {%- if entry.description %}
             <br>
             {{ entry.description }}

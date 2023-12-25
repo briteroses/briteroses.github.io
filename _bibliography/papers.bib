@@ -15,7 +15,7 @@
 
 @article{huang2023robustness,
   title={Adversarial Learned Soups: Neural Network Averaging for Joint Clean and Robust Performance},
-  author={Huang, Brian RY and Salman, Hadi and Mądry, Aleksander},
+  author={Huang, Brian RY},
   journal={Master's Thesis},
   year={2023},
   code={https://github.com/briteroses/learned-soups},
@@ -23,6 +23,7 @@
   selected={true},
   preview={learnedarch.png},
   displaytype={preprint},
+  prenote={Supervised by Hadi Salman and Aleksander Mądry.},
   description={We introduce weight-space interpolation methods to the adversarial robustness regime, devising a wrapper architecture to optimize the interpolation coefficients of a "model soup" via adversarial training. Varying the intensity of adversarial training (perturbation distance, TRADES weightings, etc.) leads to a smooth tradeoff between the resulting clean and robust accuracy of the interpolated model.}
 }
 
@@ -34,4 +35,35 @@
   pdf={Siemens_Final_Research_Report.pdf},
   displaytype={preprint},
   description={Some differential geometry / general relativity research on black hole formation that I was fortunate to conduct during high school!}
+}
+
+@article{huang2023codegen,
+  title={Synthetic Instruction Tuning for Retrieval-Augmented Code Generation},
+  author={Arora*, Ajay and Hansen*, Jacob and Huang*, Brian RY},
+  year={2023},
+  code={https://github.com/briteroses/codegen},
+  pdf={Synthetic_Instruction_Fine_Tuning_for_Code_Generation.pdf},
+  displaytype={misc},
+  prenote={Final project for 6.S986 Large Language Models and Beyond.},
+  description={We perform instruction bootstrapping with STaR rationalization (a la Zelikman et al.) to generate diverse synthetic ICL exemplars for code generation in LLMs. For small models, irrelevant or overly lengthy code documentation in the ICL setting hurts codegen performance--RAG is tricky!},
+}
+
+@article{huang2023redwood,
+  title={Measuring Monosemanticity via Causal Scrubbing},
+  author={Huang, Brian RY and Garriga-Alonso, Adrià},
+  year={2023},
+  code={https://github.com/briteroses/monosemanticity},
+  pdf={Measuring_Monosemanticity_via_Causal_Scrubbing.pdf},
+  displaytype={misc},
+  prenote={Final deliverable for Redwood Research REMIX (Winter 2023).},
+  description={We validate a possible measure for the "degree of monosemanticity" of LLM neurons: use causal mediation techniques to ablate a neuron with a perfectly monosemantic neuron, and measure KL divergence between the resulting logits.}
+}
+
+@article{huang2022inference,
+  title={Markov Chain Monte Carlo for Cipher Breaking},
+  author={Huang, Brian RY},
+  year={2022},
+  code={https://github.com/briteroses/mcmc-cipher-breaking},
+  displaytype={misc},
+  description={Final project for 6.437 Inference and Information. We implement the Metropolis-Hastings method for text decoding and experiment with algorithmic optimizations to improve decoding performance and speed.},
 }
