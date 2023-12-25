@@ -2,7 +2,7 @@
 ---
 <!-- _layouts/bib.html -->
       <div class="row">
-        {%- if site.enable_publication_thumbnails & !(entry.displaytype contains "misc") -%}
+        {%- if site.enable_publication_thumbnails -%}
         <div class="col-sm-2 {% if entry.preview %}preview{% else %}abbr{% endif %}">
         {%- if entry.abbr -%}
           {%- if site.data.venues[entry.abbr] -%}
@@ -17,7 +17,7 @@
         {%- endif -%}
         {%- if entry.preview -%}
           {%- if entry.abbr -%}
-          <br>
+          <br style="margin-bottom:3cm;">
           {%- endif -%}
           {% if entry.preview contains '://' -%}
           <img class="preview z-depth-1 rounded" src="{{ entry.preview }}">
