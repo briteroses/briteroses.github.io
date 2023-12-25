@@ -7,6 +7,9 @@ nav: true
 nav_order: 2
 ---
 
-For now, this page is assumed to be a static description of your courses. You can convert it to a collection similar to `_projects/` so that you can have a dedicated page for each course.
-
-Organize your courses by years, topics, or universities, however you like!
+<ul>
+  <li> Spring 2023: TA for 6.3720/6.3722 Intro to Statistical Data Analysis
+  <li> Fall 2022: TA for 6.7900 Machine Learning (grad)
+  <li> Spring 2022: TA for 18.S096 Intro to Math Reasoning
+  <li> Spring 2022: Lab Assistant for 6.036 Intro to Machine Learning
+</ul>
