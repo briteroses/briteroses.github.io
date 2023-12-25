@@ -15,7 +15,7 @@
             <abbr class="badge">{{entry.abbr}}</abbr>
           {%- endif -%}
         {%- endif -%}
-        {%- elsif entry.preview -%}
+        {%- if entry.preview -%}
           {% if entry.preview contains '://' -%}
           <img class="preview z-depth-1 rounded" src="{{ entry.preview }}">
           {%- else -%}
@@ -26,6 +26,7 @@
             zoomable=false
             alt=entry.preview -%}
           {%- endif -%}
+        {%- endif -%}
         </div>
         {%- endif -%}
 
