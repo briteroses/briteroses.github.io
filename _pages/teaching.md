@@ -7,6 +7,7 @@ nav: true
 nav_order: 2
 ---
 
+<h3>MIT Courses</h3>
 <ul>
   <li>Spring 2023: TA for 6.3720/6.3722 Intro to Statistical Data Analysis</li>
   <li>Fall 2022: TA for 6.7900 Machine Learning (grad)</li>
