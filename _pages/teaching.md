@@ -4,7 +4,7 @@ permalink: /teaching/
 title: teaching
 description: I'm passionate about pedagogy. Here are the courses I've TAed, as well as other forms of mentorship I've been involved with.
 nav: true
-nav_order: 2
+nav_order: 3
 ---
 
 <h3>MIT Courses</h3>

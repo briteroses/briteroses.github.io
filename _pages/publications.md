@@ -4,7 +4,7 @@ permalink: /works/
 title: research & projects
 description: 
 nav: true
-nav_order: 1
+nav_order: 2
 ---
 <!-- _bibliography/papers -->
 
