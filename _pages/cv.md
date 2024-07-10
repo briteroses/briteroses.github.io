@@ -4,5 +4,5 @@ permalink: /cv/
 title: cv
 nav: true
 nav_order: 3
-cv_pdf: Huang_Brian_CV.pdf
+cv_pdf: Huang_Brian.pdf
 ---
