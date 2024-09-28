@@ -1,17 +1,18 @@
 ---
 ---
-@article{huang2023know?,
-  title={Does It Know?: Probing and Benchmarking Uncertainty in Language Model Latent Beliefs},
-  author={Huang, Brian RY and Kwon, Joe},
-  journal={ATTRIB Workshop @ NeurIPS},
-  abbr={ATTRIB @ NeurIPS},
-  year={2023},
-  code={https://github.com/briteroses/uncertainty},
-  openreview={https://openreview.net/pdf?id=uSvN2oozRK},
+@article{bijection,
+  title={Endless Jailbreaks with Bijection Learning},
+  author={Huang, Brian RY and Li, Maximilian and Tang, Leonard},
+  journal={preprint},
+  abbr={preprint},
+  year={2024},
+  code={https://github.com/haizelabs/bijection-learning},
+  pdf={bijection_learning.pdf},
   selected={true},
-  preview={uccs.png},
+  preview={bijection.png},
   displaytype={paper},
-  description={We extend the recent work of Contrast-Consistent Search by Burns et al., 2023, to detect uncertainty in the factual beliefs of language models. We create a toy dataset of timestamped news factoids as a true/false/uncertain classification benchmark for LLMs with a known training cutoff date.}
+  prenote={Work done as part of Haize Labs.},
+  description={We devise a "bijection attack," an encoding scheme taught to a language model in-context which bypasses model alignment and comprises a highly effective jailbreak. We differentially modulate the complexity of our bijection scheme across different models and derive a quadratic scaling law, finding that, curiously, our bijection attack is stronger on higher-capability models.}
 }
 
 @article{huang2023robustness,
@@ -28,14 +29,39 @@
   description={We introduce weight-space interpolation methods to the adversarial robustness regime, devising a wrapper architecture to optimize the interpolation coefficients of a "model soup" via adversarial training. Varying the intensity of adversarial training (perturbation distance, TRADES weightings, etc.) leads to a smooth tradeoff between the resulting clean and robust accuracy of the interpolated model.}
 }
 
+@article{huang2023know?,
+  title={Does It Know?: Probing and Benchmarking Uncertainty in Language Model Latent Beliefs},
+  author={Huang, Brian RY and Kwon, Joe},
+  journal={ATTRIB Workshop @ NeurIPS},
+  abbr={ATTRIB @ NeurIPS},
+  year={2023},
+  code={https://github.com/briteroses/uncertainty},
+  openreview={https://openreview.net/pdf?id=uSvN2oozRK},
+  selected={true},
+  preview={uccs.png},
+  displaytype={paper},
+  description={We extend the recent work of Contrast-Consistent Search by Burns et al., 2023, to detect uncertainty in the factual beliefs of language models. We create a toy dataset of timestamped news factoids as a true/false/uncertain classification benchmark for LLMs with a known training cutoff date.}
+}
+
 @article{huang2017sufficient,
   title={On Sufficient Conditions for Trapped Surfaces in Spherically Symmetric Spacetimes},
   author={Huang, Brian RY},
   journal={presented at Siemens Competition},
   year={2017},
   pdf={Siemens_Final_Research_Report.pdf},
+  selected={true},
   displaytype={preprint},
   description={Some differential geometry / general relativity research on black hole formation that I was fortunate to conduct during high school!}
+}
+
+@article{compositions,
+  title={Plentiful Jailbreaks with String Compositions},
+  author={Huang, Brian RY},
+  journal={preprint},
+  year={2024},
+  pdf={Plentiful_Jailbreaks_with_String_Compositions.pdf},
+  displaytype={preprint},
+  description={We ensemble a large set of string-level obfuscation-based attack mechanisms across the language model redteaming literature. We construct arbitrary compositions of these string-level transformations and devise a simple adaptive attack that is highly effective on frontier models. Small and cute idea that was the precursor for bijection learning.}
 }
 
 @article{huang2023codegen,
