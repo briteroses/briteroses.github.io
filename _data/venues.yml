@@ -1,3 +1,6 @@
 "ATTRIB @ NeurIPS":
   url: https://neurips.cc/
   color: "#00369f"
+
+"preprint":
+  color: "#FFFFF0"
