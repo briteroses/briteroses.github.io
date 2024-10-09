@@ -1,6 +1,10 @@
 "ATTRIB @ NeurIPS":
-  url: https://neurips.cc/
+  url: https://attrib-workshop.cc/
   color: "#00369f"
+
+"SoLaR @ NeurIPS":
+  url: https://solar-neurips.github.io/
+  color: "#FFD700"
 
 "preprint":
   color: "#FFFFF0"
