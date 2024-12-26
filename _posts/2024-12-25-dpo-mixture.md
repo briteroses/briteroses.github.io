@@ -3,7 +3,7 @@ layout: post
 title: Some DPO napkin math
 date: 2024-12-26
 description: TL;DR if we formulate prompt-conditioned output distributions from an LLM as a mixture of an aligned component + unaligned component, then a DPO tune "tilts" the output towards the aligned component, diminishing---but not expunging!---the unaligned component.
-tags: dpo preference-tuning alignment fun-math
+tags: dpo preference-tuning alignment math
 categories: research
 related_posts: false
 ---
