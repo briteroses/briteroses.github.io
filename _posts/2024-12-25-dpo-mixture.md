@@ -12,7 +12,7 @@ In progress!
 
 First, we show that the output distribution has a specific mixture form:
 
-**Lemma 1.** Assume the preference-tuning objective function used is \eqref{eqn:objective}. With no additional assumptions on `$$\mathcal{A}$$` and `$$\mathcal{U}$$`, the output distribution of `$$\theta$$` can be written as:
+**Lemma 1.** Assume the preference-tuning objective function used is [TODO]. With no additional assumptions on $$ \mathcal{A}$$  and $$ \mathcal{U} $$, the output distribution of $$ \theta $$ can be written as:
 
 $$
 p_\theta(y|x)=\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)+\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)
