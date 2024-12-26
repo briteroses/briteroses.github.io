@@ -8,12 +8,12 @@ categories: research
 related_posts: false
 ---
 
-\(
+$$
 \DeclareMathOperator\supp{supp}
 \DeclareMathOperator\TPM{TPM}
 \DeclareMathOperator\unif{unif}
 \DeclareMathOperator\card{card}
-\)
+$$
 
 As a mathy Christmas treat, I wanted to share some napkin math I did earlier this year while studying the preference tuning literature, especially the (now seminal) [DPO paper](https://arxiv.org/abs/2305.18290). For starters, DPO and its cousin techniques (like [KTO](https://arxiv.org/abs/2402.01306) and others) hinge on optimizing a KL-constrained RL objective, which I reproduce below:
 
