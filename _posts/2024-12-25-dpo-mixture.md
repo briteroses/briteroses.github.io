@@ -25,17 +25,17 @@ Here, $$ \theta $$ is our current model parameters optimized during the preferen
 
 The solution to the KL-constrained RL loss has a well-known form that upweights or downweights a sampled response relative to its reward. However, at least to me, this solution isn't very intuitive for understanding how more overarching model behaviors are altered under a preference tune. As a motivating example, DPO tuning is often used as a line of defense for model safety: say, promoting refusals for a wide range of explicitly [harmful intents](https://arxiv.org/abs/2402.04249), or [reducing toxicity](https://arxiv.org/abs/2401.01967) for all kinds of mundane prompts. If we care about obtaining better refusals or more nontoxic behaviors "across the board," then we want to understand how entire probability masses corresponding to general output specifications (for example, all possible responses with toxic content) are shifted under DPO. These desired behavioral shifts can be further confuzzled in practice, especially since the reward is not known a priori and issues such as data-policy mismatch or likelihood displacement can produce pretty unintuitive results from a DPO tune. ([This blog post](https://tianjianl.github.io/blog/2024/dpo/) provides a great overview of DPO failure modes, if you want to read further.)
 
-To capture a more macroscopic view of DPO, I find it useful to formulate the prompt-conditioned output distribution of our reference model $$ p_{\theta_{\text{ref}}}(y|x) $$ as a mixture of two component distributions, one "aligned" and the other "unaligned." We denote $$ \mathcal{A}_{x}(y|x) $$ for the aligned distribution and $$ \mathcal{U}_{x}(y|x) $$, with mixture weight $$ \alpha_{x} $$:
+To capture a more macroscopic view of DPO, I find it useful to formulate the prompt-conditioned output distribution of our reference model $$ p_{\theta_{\text{ref}}}(y \vert x) $$ as a mixture of two component distributions, one "aligned" and the other "unaligned." We denote $$ \mathcal{A}_{x}(y|x) $$ for the aligned distribution and $$ \mathcal{U}_{x}(y \vert x) $$, with mixture weight $$ \alpha_{x} $$:
 
 $$
 p_{\theta_{ref}}(y | x) = \alpha_x p_{\mathcal{A}_x}(y | x) + (1-\alpha_x) p_{\mathcal{U}_x}(y | x).
 $$
 
-For a (somewhat handwavy, sorry!) illustration based on our toxicity-reduction scenario, we might assign all fully nontoxic responses to the aligned component, all extremely toxic responses to the unaligned component, and a range of ambiguous responses to both components, with intra-component weightings depending on the level of toxicity. In other words, we can potentially describe more general specifications of model behavior under the umbrella of these mixture components. If we establish certain properties of the post-DPO output distribution $$ p_\theta(y | x) $$ through the lens of $$ \mathcal{A} $$ and $$ \mathcal{U} $$, we gain insight into how DPO may induce---or fail to induce---a broader behavior such as toxicity reduction or safety refusals.
+For a (somewhat handwavy, sorry!) illustration based on our toxicity-reduction scenario, we might assign all fully nontoxic responses to the aligned component, all extremely toxic responses to the unaligned component, and a range of ambiguous responses to both components, with intra-component weightings depending on the level of toxicity. In other words, we can potentially describe more general specifications of model behavior under the umbrella of these mixture components. If we establish certain properties of the post-DPO output distribution $$ p_\theta(y \vert x) $$ through the lens of $$ \mathcal{A} $$ and $$ \mathcal{U} $$, we gain insight into how DPO may induce---or fail to induce---a broader behavior such as toxicity reduction or safety refusals.
 
 First, we show that the post-DPO output distribution has a specific form---no longer a mixture per-se, but a per-sample tilting of the original mixture.
 
-**Lemma 1.** Let $$ \theta $$ be the model parameters that maximize the previous KL-constrained RL objective. With no additional assumptions on $$ \mathcal{A}$$  and $$ \mathcal{U} $$, the output distribution of $$ \theta $$ can be written as:
+**Lemma 1.** Let $$ \theta $$ be the model parameters that maximize the previous KL-constrained RL objective. With no additional assumptions on $$ \mathcal{A} $$ and $$ \mathcal{U} $$, the output distribution of $$ \theta $$ can be written as:
 
 $$
 p_\theta(y|x)=\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)+\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)
@@ -49,7 +49,7 @@ where $$ Z(x)=\sum_{y \in \supp p_\theta(\bullet | x)} p_{ref}(y|x)e^{r(y;x)/\be
 
 We can then prove a stronger result about shifts in the probability masses corresponding to each mixture component:
 
-**Theorem 2.** Write the "total probability mass" of $$ \mathcal{A} $$ in $$ p_\theta(\bullet | x) $$ as $$ \TPM(\mathcal{A};x) = \sum_{y \in \supp p_\theta(\bullet | x)} \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ (and define this respectively for $$ \mathcal{U} $$). If the reward function $$ r(y;x) $$ satisfies the following additional assumptions:
+**Theorem 2.** Write the "total probability mass" of $$ \mathcal{A} $$ in $$ p_\theta(\cdot \vert x) $$ as $$ \TPM(\mathcal{A};x) = \sum_{y \in \supp p_\theta(\bullet | x)} \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ (and define this respectively for $$ \mathcal{U} $$). If the reward function $$ r(y;x) $$ satisfies the following additional assumptions:
 
 * $$ r(y;x) $$ and $$ p_\mathcal{A}(y|x) $$ are positively correlated
 * $$ r(y;x) $$ and $$ p_\mathcal{U}(y|x) $$ are negatively correlated  
