@@ -21,7 +21,11 @@ $$
 \mathcal{L}(\theta) = E_{y \in p_\theta(y|x)}[r(y;x)] - \beta\,\mathbb{D}_{KL}(p_\theta(y|x) || p_{\theta_{\text{ref}}}(y|x)).
 $$
 
-Here, $$ \theta $$ is our current model parameters optimized during the preference tune; $$ \theta_{\text{ref}} $$ is our (frozen) reference model parameters (usually, the SFTed model or base model at the initialization of the preference tune); $$ x $$ is a (given) prompt and $$ y $$ is its sampled response from the model; $$ r $$ is the reward function; and $$ \beta $$ is the hyperparameter controlling the weighting of the KL regularization term.
+- $$ \theta $$ is our current model parameters optimized during the preference tune
+- $$ \theta_{\text{ref}} $$ is our (frozen) reference model parameters (usually, the SFTed model or base model at the initialization of the preference tune)
+- $$ x $$ is a (given) prompt and $$ y $$ is its sampled response from the model
+- $$ r $$ is the reward function
+- and $$ \beta $$ is the hyperparameter controlling the weighting of the KL regularization term.
 
 The solution to the KL-constrained RL loss has a well-known form that upweights or downweights a sampled response relative to its reward. However, at least to me, this solution isn't very intuitive for understanding how more overarching model behaviors are altered under a preference tune. As a motivating example, DPO tuning is often used as a line of defense for model safety: say, promoting refusals for a wide range of explicitly [harmful intents](https://arxiv.org/abs/2402.04249), or [reducing toxicity](https://arxiv.org/abs/2401.01967) for all kinds of mundane prompts. If we care about obtaining better refusals or more nontoxic behaviors "across the board," then we want to understand how entire probability masses corresponding to general output specifications (for example, all possible responses with toxic content) are shifted under DPO. These desired behavioral shifts can be further confuzzled in practice, especially since the reward is not known a priori and issues such as data-policy mismatch or likelihood displacement can produce pretty unintuitive results from a DPO tune. ([This blog post](https://tianjianl.github.io/blog/2024/dpo/) provides a great overview of DPO failure modes, if you want to read further.)
 
