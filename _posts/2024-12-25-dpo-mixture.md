@@ -45,11 +45,17 @@ $$
 \alpha_\mathcal{A}(y;x)=\frac{1}{Z(x)}\alpha(x)e^{r(y;x)/\beta}, \;\; \alpha_\mathcal{U}(y;x)=\frac{1}{Z(x)}(1-\alpha(x))e^{r(y;x)/\beta}
 $$
 
-where $$ Z(x)=\sum_{y \in \supp p_\theta(\cdot | x)} p_{ref}(y|x)e^{r(y;x)/\beta} $$ is the partition function of $$ p_\theta(y;x) $$.
+where $$ Z(x)=\sum_{y \in \supp p_\theta(\cdot \vert x)} p_{ref}(y \vert x)e^{r(y;x)/\beta} $$ is the partition function of $$ p_\theta(y \vert x) $$.
 
 We can then prove a stronger result about shifts in the probability masses corresponding to each mixture component:
 
-**Theorem 2.** Write the "total probability mass" of $$ \mathcal{A} $$ in $$ p_\theta(\cdot \vert x) $$ as $$ \TPM(\mathcal{A};x) = \sum_{y \in \supp p_\theta(\cdot \vert x)} \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y \vert x) $$ (and define this respectively for $$ \mathcal{U} $$). If the reward function $$ r(y;x) $$ satisfies the following additional assumptions:
+**Theorem 2.** Write the "total probability mass" of $$ \mathcal{A} $$ in $$ p_\theta(\cdot \vert x) $$ as
+
+$$
+\TPM(\mathcal{A};x) = \sum_{y \in \supp p_\theta(\cdot \vert x)} \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y \vert x)
+$$
+
+(and define this respectively for $$ \mathcal{U} $$). If the reward function $$ r(y;x) $$ satisfies the following additional assumptions:
 
 * $$ r(y;x) $$ and $$ p_\mathcal{A}(y \vert x) $$ are positively correlated
 * $$ r(y;x) $$ and $$ p_\mathcal{U}(y \vert x) $$ are negatively correlated  
@@ -93,9 +99,9 @@ $$
 
 as Lemma 1 states.
 
-For Theorem 2, we assumed $$ r(y;x) $$ was positively correlated with $$ p_\mathcal{A}(y|x) $$ and negatively correlated with $$ p_\mathcal{U}(y|x) $$. Since $$ Z(x) $$ and $$ \alpha(x) $$ are constants with respect to $$ y $$, $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ are clearly monotonic functions of $$ r(y;x) $$, and as a result, the correlation properties are preserved: $$ \alpha_\mathcal{A}(y;x) $$ is positively correlated with $$ p_\mathcal{A}(y|x) $$, and $$ \alpha_\mathcal{U}(y;x) $$ is negatively correlated with $$ p_\mathcal{U}(y|x) $$.
+For Theorem 2, we assumed $$ r(y;x) $$ was positively correlated with $$ p_\mathcal{A}(y \vert x) $$ and negatively correlated with $$ p_\mathcal{U}(y \vert x) $$. Since $$ Z(x) $$ and $$ \alpha(x) $$ are constants with respect to $$ y $$, $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ are clearly monotonic functions of $$ r(y;x) $$, and as a result, the correlation properties are preserved: $$ \alpha_\mathcal{A}(y;x) $$ is positively correlated with $$ p_\mathcal{A}(y \vert x) $$, and $$ \alpha_\mathcal{U}(y;x) $$ is negatively correlated with $$ p_\mathcal{U}(y \vert x) $$.
 
-Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\cdot | x) = \supp p_{ref}(\cdot | x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot | x) $$, and use the correlation properties:
+Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\cdot | x) = \supp p_{ref}(\cdot \vert x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot \vert x) $$, and use the correlation properties:
 
 $$
 \begin{align*}
@@ -111,7 +117,7 @@ E_y[\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)] &< E_y[\alpha_\mathcal{U}(y;x)]E_
 \end{align*}
 $$
 
-(For the sake of brevity, we mostly omit writing the distribution over which the expectation is taken; for the rest of the proof, $$ E_y[\cdot] $$ is shorthand for $$ E_{y \in \unif(\supp p_{\theta}(\cdot | x))}[\cdot] $$.) The $$ E_y[e^{r(y;x)/\beta}] $$ and partition function terms vanish upon dividing the inequalities:
+(For the sake of brevity, we mostly omit writing the distribution over which the expectation is taken; for the rest of the proof, $$ E_y[\cdot] $$ is shorthand for $$ E_{y \in \unif(\supp p_{\theta}(\cdot \vert x))}[\cdot] $$.) The $$ E_y[e^{r(y;x)/\beta}] $$ and partition function terms vanish upon dividing the inequalities:
 
 $$
 \frac{E_y[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)]}{E_y[\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)]} > \frac{E_y[\alpha(x)p_\mathcal{A}(y|x)]}{E_y[(1-\alpha(x))p_\mathcal{U}(y|x)]}
@@ -123,13 +129,13 @@ $$
 \frac{E_y[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)]}{E_y[p_\theta(y|x)]} > \frac{E_y[\alpha(x)p_\mathcal{A}(y|x)]}{E_y[p_{ref}(y|x)]}
 $$
 
-Finally, we multiply all expectations by $$ \card(\supp p_\theta(\cdot | x)) $$. Using the property that
+Finally, we multiply all expectations by $$ \card(\supp p_\theta(\cdot \vert x)) $$. Using the property that
 
 $$
 \card(\supp p) \cdot E_{y \in \unif(\supp p)}[p(x)] = 1
 $$
 
-for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot | x) = \supp p_{ref}(\cdot | x) $$, we see that the expectations of  $$ p_\theta(y|x) $$ and $$ p_{ref}(y|x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ by $$ \card(\supp p_\theta(\cdot | x)) $$ gives the total probability mass. We recover:
+for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot \vert x) = \supp p_{ref}(\cdot \vert x) $$, we see that the expectations of  $$ p_\theta(y \vert x) $$ and $$ p_{ref}(y \vert x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ by $$ \card(\supp p_\theta(\cdot \vert x)) $$ gives the total probability mass. We recover:
 
 $$
 \TPM(\mathcal{A};x) > \alpha(x) \;\;\;\;\;\;\;\; \text{and likewise, } \TPM(\mathcal{U};x) < (1-\alpha(x)).
