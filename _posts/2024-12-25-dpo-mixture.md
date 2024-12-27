@@ -101,7 +101,7 @@ as Lemma 1 states.
 
 For Theorem 2, we assumed $$ r(y;x) $$ was positively correlated with $$ p_\mathcal{A}(y \vert x) $$ and negatively correlated with $$ p_\mathcal{U}(y \vert x) $$. Since $$ Z(x) $$ and $$ \alpha(x) $$ are constants with respect to $$ y $$, $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ are clearly monotonic functions of $$ r(y;x) $$, and as a result, the correlation properties are preserved: $$ \alpha_\mathcal{A}(y;x) $$ is positively correlated with $$ p_\mathcal{A}(y \vert x) $$, and $$ \alpha_\mathcal{U}(y;x) $$ is negatively correlated with $$ p_\mathcal{U}(y \vert x) $$.
 
-Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\cdot | x) = \supp p_{ref}(\cdot \vert x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot \vert x) $$, and use the correlation properties:
+Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\cdot \vert x) = \supp p_{ref}(\cdot \vert x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot \vert x) $$, and use the correlation properties:
 
 $$
 \begin{align*}
@@ -135,7 +135,7 @@ $$
 \card(\supp p) \cdot E_{y \in \unif(\supp p)}[p(x)] = 1
 $$
 
-for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot \vert x) = \supp p_{ref}(\cdot \vert x) $$, we see that the expectations of  $$ p_\theta(y \vert x) $$ and $$ p_{ref}(y \vert x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ by $$ \card(\supp p_\theta(\cdot \vert x)) $$ gives the total probability mass. We recover:
+for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot \vert x) = \supp p_{ref}(\cdot \vert x) $$, we see that the expectations of  $$ p_\theta(y \vert x) $$ and $$ p_{ref}(y \vert x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y \vert x) $$ by $$ \card(\supp p_\theta(\cdot \vert x)) $$ gives the total probability mass. We recover:
 
 $$
 \TPM(\mathcal{A};x) > \alpha(x) \;\;\;\;\;\;\;\; \text{and likewise, } \TPM(\mathcal{U};x) < (1-\alpha(x)).
