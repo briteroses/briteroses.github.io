@@ -18,17 +18,17 @@ $$
 As a mathy Christmas treat, I wanted to share some napkin math I did earlier this year while studying the preference tuning literature, especially the (now seminal) [DPO paper](https://arxiv.org/abs/2305.18290). For starters, DPO and its cousin techniques (like [KTO](https://arxiv.org/abs/2402.01306) and others) hinge on optimizing a KL-constrained RL objective, which I reproduce below:
 
 $$
-\mathcal{L}(\theta) = E_{y \in p_\theta(y|x)}[r(y;x)] - \beta\,\mathbb{D}_{KL}(p_\theta(y|x) || p_{\theta_{ref}}(y|x)).
+\mathcal{L}(\theta) = E_{y \in p_\theta(y|x)}[r(y;x)] - \beta\,\mathbb{D}_{KL}(p_\theta(y|x) || p_{\theta_{\text{ref}}}(y|x)).
 $$
 
-Here, $$ \theta $$ is our current model parameters optimized during the preference tune; $$ \theta_{ref} $$ is our (frozen) reference model parameters (usually, the SFTed model or base model at the initialization of the preference tune); $$ x $$ is a (given) prompt and $$ y $$ is its sampled response from the model; $$ r $$ is the reward function; and $$ \beta $$ is the hyperparameter controlling the weighting of the KL regularization term.
+Here, $$ \theta $$ is our current model parameters optimized during the preference tune; $$ \theta_{\text{ref}} $$ is our (frozen) reference model parameters (usually, the SFTed model or base model at the initialization of the preference tune); $$ x $$ is a (given) prompt and $$ y $$ is its sampled response from the model; $$ r $$ is the reward function; and $$ \beta $$ is the hyperparameter controlling the weighting of the KL regularization term.
 
 The solution to the KL-constrained RL loss has a well-known form that upweights or downweights a sampled response relative to its reward. However, at least to me, this solution isn't very intuitive for understanding how more overarching model behaviors are altered under a preference tune. As a motivating example, DPO tuning is often used as a line of defense for model safety: say, promoting refusals for a wide range of explicitly [harmful intents](https://arxiv.org/abs/2402.04249), or [reducing toxicity](https://arxiv.org/abs/2401.01967) for all kinds of mundane prompts. If we care about obtaining better refusals or more nontoxic behaviors "across the board," then we want to understand how entire probability masses corresponding to general output specifications (for example, all possible responses with toxic content) are shifted under DPO. These desired behavioral shifts can be further confuzzled in practice, especially since the reward is not known a priori and issues such as data-policy mismatch or likelihood displacement can produce pretty unintuitive results from a DPO tune. ([This blog post](https://tianjianl.github.io/blog/2024/dpo/) provides a great overview of DPO failure modes, if you want to read further.)
 
 To capture a more macroscopic view of DPO, I find it useful to formulate the prompt-conditioned output distribution of our reference model $$ p_{\theta_{\text{ref}}}(y \vert x) $$ as a mixture of two component distributions, one "aligned" and the other "unaligned." We denote $$ \mathcal{A}_{x}(y \vert x) $$ for the aligned distribution and $$ \mathcal{U}_{x}(y \vert x) $$, with mixture weight $$ \alpha_{x} $$:
 
 $$
-p_{\theta_{ref}}(y | x) = \alpha_x p_{\mathcal{A}_x}(y | x) + (1-\alpha_x) p_{\mathcal{U}_x}(y | x).
+p_{\theta_{\text{ref}}}(y | x) = \alpha_x p_{\mathcal{A}_x}(y | x) + (1-\alpha_x) p_{\mathcal{U}_x}(y | x).
 $$
 
 For a (somewhat handwavy, sorry!) illustration based on our toxicity-reduction scenario, we might assign all fully nontoxic responses to the aligned component, all extremely toxic responses to the unaligned component, and a range of ambiguous responses to both components, with intra-component weightings depending on the level of toxicity. In other words, we can potentially describe more general specifications of model behavior under the umbrella of these mixture components. If we establish certain properties of the post-DPO output distribution $$ p_\theta(y \vert x) $$ through the lens of $$ \mathcal{A} $$ and $$ \mathcal{U} $$, we gain insight into how DPO may induce---or fail to induce---a broader behavior such as toxicity reduction or safety refusals.
@@ -45,7 +45,7 @@ $$
 \alpha_\mathcal{A}(y;x)=\frac{1}{Z(x)}\alpha(x)e^{r(y;x)/\beta}, \;\; \alpha_\mathcal{U}(y;x)=\frac{1}{Z(x)}(1-\alpha(x))e^{r(y;x)/\beta}
 $$
 
-where $$ Z(x)=\sum_{y \in \supp p_\theta(\cdot \vert x)} p_{ref}(y \vert x)e^{r(y;x)/\beta} $$ is the partition function of $$ p_\theta(y \vert x) $$.
+where $$ Z(x)=\sum_{y \in \supp p_\theta(\cdot \vert x)} p_{\theta_{\text{ref}}}(y \vert x)e^{r(y;x)/\beta} $$ is the partition function of $$ p_\theta(y \vert x) $$.
 
 We can then prove a stronger result about shifts in the probability masses corresponding to each mixture component:
 
@@ -75,19 +75,19 @@ First, the closed-form solution for the KL-constrained RL objective is well-know
 
 $$
 \begin{align*}
-\mathcal{L}(\theta) &= \sum_y p_\theta(y|x)r(y;x) - \beta p_\theta(y|x) \log\left(\frac{p_\theta(y|x)}{p_{ref}(y|x)}\right) \\
-&= \beta \sum_y p_\theta(y|x) \Big[ \log e^{r(y;x)/\beta} - \log\left(\frac{p_\theta(y|x)}{p_{ref}(y|x)}\right) \Big] \\
-&= -\beta \sum_y p_\theta(y|x) \log\left(\frac{p_\theta(y|x)}{\frac{1}{Z(x)}p_{ref}(y|x)e^{r(y;x)/\beta}}\right) + \beta\log{Z(x)}
+\mathcal{L}(\theta) &= \sum_y p_\theta(y|x)r(y;x) - \beta p_\theta(y|x) \log\left(\frac{p_\theta(y|x)}{p_{\theta_{\text{ref}}}(y|x)}\right) \\
+&= \beta \sum_y p_\theta(y|x) \Big[ \log e^{r(y;x)/\beta} - \log\left(\frac{p_\theta(y|x)}{p_{\theta_{\text{ref}}}(y|x)}\right) \Big] \\
+&= -\beta \sum_y p_\theta(y|x) \log\left(\frac{p_\theta(y|x)}{\frac{1}{Z(x)}p_{\theta_{\text{ref}}}(y|x)e^{r(y;x)/\beta}}\right) + \beta\log{Z(x)}
 \end{align*}
 $$
 
-where $$ Z(x) = \sum_y p_{ref}(y \vert x)e^{r(y;x)/\beta} $$ is the partition function. Notice that $$ \frac{1}{Z(x)}p_{ref}(y \vert x)e^{r(y;x)/\beta} $$ is a valid probability distribution, so by Gibbs' inequality, the objective $$ \mathcal{L}(\theta) $$ is maximized when:
+where $$ Z(x) = \sum_y p_{\theta_{\text{ref}}}(y \vert x)e^{r(y;x)/\beta} $$ is the partition function. Notice that $$ \frac{1}{Z(x)}p_{\theta_{\text{ref}}}(y \vert x)e^{r(y;x)/\beta} $$ is a valid probability distribution, so by Gibbs' inequality, the objective $$ \mathcal{L}(\theta) $$ is maximized when:
 
 $$
-p_\theta(y|x) = \frac{1}{Z(x)}p_{ref}(y|x)e^{r(y;x)/\beta}.
+p_\theta(y|x) = \frac{1}{Z(x)}p_{\theta_{\text{ref}}}(y|x)e^{r(y;x)/\beta}.
 $$
 
-Substituting the mixture formulation for $$ p_{ref}(y \vert x) $$ and performing a little more algebra gives us:
+Substituting the mixture formulation for $$ p_{\theta_{\text{ref}}}(y \vert x) $$ and performing a little more algebra gives us:
 
 $$
 p_\theta(y|x)=\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)+\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)
@@ -101,7 +101,7 @@ as Lemma 1 states.
 
 For Theorem 2, we assumed $$ r(y;x) $$ was positively correlated with $$ p_\mathcal{A}(y \vert x) $$ and negatively correlated with $$ p_\mathcal{U}(y \vert x) $$. Since $$ Z(x) $$ and $$ \alpha(x) $$ are constants with respect to $$ y $$, $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ are clearly monotonic functions of $$ r(y;x) $$, and as a result, the correlation properties are preserved: $$ \alpha_\mathcal{A}(y;x) $$ is positively correlated with $$ p_\mathcal{A}(y \vert x) $$, and $$ \alpha_\mathcal{U}(y;x) $$ is negatively correlated with $$ p_\mathcal{U}(y \vert x) $$.
 
-Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\cdot \vert x) = \supp p_{ref}(\cdot \vert x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot \vert x) $$, and use the correlation properties:
+Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{\theta_{\text{ref}}} $$. Therefore, $$ \supp p_\theta(\cdot \vert x) = \supp p_{\theta_{\text{ref}}}(\cdot \vert x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot \vert x) $$, and use the correlation properties:
 
 $$
 \begin{align*}
@@ -126,7 +126,7 @@ $$
 Reciprocating the inequality, adding 1 to both sides, and reciprocating again yields:
 
 $$
-\frac{E_y[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)]}{E_y[p_\theta(y|x)]} > \frac{E_y[\alpha(x)p_\mathcal{A}(y|x)]}{E_y[p_{ref}(y|x)]}
+\frac{E_y[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)]}{E_y[p_\theta(y|x)]} > \frac{E_y[\alpha(x)p_\mathcal{A}(y|x)]}{E_y[p_{\theta_{\text{ref}}}(y|x)]}
 $$
 
 Finally, we multiply all expectations by $$ \card(\supp p_\theta(\cdot \vert x)) $$. Using the property that
@@ -135,7 +135,7 @@ $$
 \card(\supp p) \cdot E_{y \in \unif(\supp p)}[p(x)] = 1
 $$
 
-for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot \vert x) = \supp p_{ref}(\cdot \vert x) $$, we see that the expectations of  $$ p_\theta(y \vert x) $$ and $$ p_{ref}(y \vert x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y \vert x) $$ by $$ \card(\supp p_\theta(\cdot \vert x)) $$ gives the total probability mass. We recover:
+for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot \vert x) = \supp p_{\theta_{\text{ref}}}(\cdot \vert x) $$, we see that the expectations of  $$ p_\theta(y \vert x) $$ and $$ p_{\theta_{\text{ref}}}(y \vert x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y \vert x) $$ by $$ \card(\supp p_\theta(\cdot \vert x)) $$ gives the total probability mass. We recover:
 
 $$
 \TPM(\mathcal{A};x) > \alpha(x) \;\;\;\;\;\;\;\; \text{and likewise, } \TPM(\mathcal{U};x) < (1-\alpha(x)).
