@@ -25,7 +25,7 @@ Here, $$ \theta $$ is our current model parameters optimized during the preferen
 
 The solution to the KL-constrained RL loss has a well-known form that upweights or downweights a sampled response relative to its reward. However, at least to me, this solution isn't very intuitive for understanding how more overarching model behaviors are altered under a preference tune. As a motivating example, DPO tuning is often used as a line of defense for model safety: say, promoting refusals for a wide range of explicitly [harmful intents](https://arxiv.org/abs/2402.04249), or [reducing toxicity](https://arxiv.org/abs/2401.01967) for all kinds of mundane prompts. If we care about obtaining better refusals or more nontoxic behaviors "across the board," then we want to understand how entire probability masses corresponding to general output specifications (for example, all possible responses with toxic content) are shifted under DPO. These desired behavioral shifts can be further confuzzled in practice, especially since the reward is not known a priori and issues such as data-policy mismatch or likelihood displacement can produce pretty unintuitive results from a DPO tune. ([This blog post](https://tianjianl.github.io/blog/2024/dpo/) provides a great overview of DPO failure modes, if you want to read further.)
 
-To capture a more macroscopic view of DPO, I find it useful to formulate the prompt-conditioned output distribution of our reference model $$ p_{\theta_{\text{ref}}}(y \vert x) $$ as a mixture of two component distributions, one "aligned" and the other "unaligned." We denote $$ \mathcal{A}_{x}(y|x) $$ for the aligned distribution and $$ \mathcal{U}_{x}(y \vert x) $$, with mixture weight $$ \alpha_{x} $$:
+To capture a more macroscopic view of DPO, I find it useful to formulate the prompt-conditioned output distribution of our reference model $$ p_{\theta_{\text{ref}}}(y \vert x) $$ as a mixture of two component distributions, one "aligned" and the other "unaligned." We denote $$ \mathcal{A}_{x}(y \vert x) $$ for the aligned distribution and $$ \mathcal{U}_{x}(y \vert x) $$, with mixture weight $$ \alpha_{x} $$:
 
 $$
 p_{\theta_{ref}}(y | x) = \alpha_x p_{\mathcal{A}_x}(y | x) + (1-\alpha_x) p_{\mathcal{U}_x}(y | x).
@@ -45,17 +45,17 @@ $$
 \alpha_\mathcal{A}(y;x)=\frac{1}{Z(x)}\alpha(x)e^{r(y;x)/\beta}, \;\; \alpha_\mathcal{U}(y;x)=\frac{1}{Z(x)}(1-\alpha(x))e^{r(y;x)/\beta}
 $$
 
-where $$ Z(x)=\sum_{y \in \supp p_\theta(\bullet | x)} p_{ref}(y|x)e^{r(y;x)/\beta} $$ is the partition function of $$ p_\theta(y;x) $$.
+where $$ Z(x)=\sum_{y \in \supp p_\theta(\cdot | x)} p_{ref}(y|x)e^{r(y;x)/\beta} $$ is the partition function of $$ p_\theta(y;x) $$.
 
 We can then prove a stronger result about shifts in the probability masses corresponding to each mixture component:
 
-**Theorem 2.** Write the "total probability mass" of $$ \mathcal{A} $$ in $$ p_\theta(\cdot \vert x) $$ as $$ \TPM(\mathcal{A};x) = \sum_{y \in \supp p_\theta(\bullet | x)} \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ (and define this respectively for $$ \mathcal{U} $$). If the reward function $$ r(y;x) $$ satisfies the following additional assumptions:
+**Theorem 2.** Write the "total probability mass" of $$ \mathcal{A} $$ in $$ p_\theta(\cdot \vert x) $$ as $$ \TPM(\mathcal{A};x) = \sum_{y \in \supp p_\theta(\cdot \vert x)} \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y \vert x) $$ (and define this respectively for $$ \mathcal{U} $$). If the reward function $$ r(y;x) $$ satisfies the following additional assumptions:
 
-* $$ r(y;x) $$ and $$ p_\mathcal{A}(y|x) $$ are positively correlated
-* $$ r(y;x) $$ and $$ p_\mathcal{U}(y|x) $$ are negatively correlated  
+* $$ r(y;x) $$ and $$ p_\mathcal{A}(y \vert x) $$ are positively correlated
+* $$ r(y;x) $$ and $$ p_\mathcal{U}(y \vert x) $$ are negatively correlated  
 * $$ r $$ is finite
 
-then the total probability masses of $$ \mathcal{A} $$ and $$ \mathcal{U} $$ in $$ p_\theta(\bullet | x) $$ satisfy:
+then the total probability masses of $$ \mathcal{A} $$ and $$ \mathcal{U} $$ in $$ p_\theta(\cdot \vert x) $$ satisfy:
 
 $$
 1 > \TPM(\mathcal{A};x) \geq \alpha(x), \;\; 0 < \TPM(\mathcal{U};x) \leq (1-\alpha(x)).
@@ -75,13 +75,13 @@ $$
 \end{align*}
 $$
 
-where $$ Z(x) = \sum_y p_{ref}(y|x)e^{r(y;x)/\beta} $$ is the partition function. Notice that $$ \frac{1}{Z(x)}p_{ref}(y|x)e^{r(y;x)/\beta} $$ is a valid probability distribution, so by Gibbs' inequality, the objective $$ \mathcal{L}(\theta) $$ is maximized when:
+where $$ Z(x) = \sum_y p_{ref}(y \vert x)e^{r(y;x)/\beta} $$ is the partition function. Notice that $$ \frac{1}{Z(x)}p_{ref}(y \vert x)e^{r(y;x)/\beta} $$ is a valid probability distribution, so by Gibbs' inequality, the objective $$ \mathcal{L}(\theta) $$ is maximized when:
 
 $$
 p_\theta(y|x) = \frac{1}{Z(x)}p_{ref}(y|x)e^{r(y;x)/\beta}.
 $$
 
-Substituting the mixture formulation for $$ p_{ref}(y|x) $$ and performing a little more algebra gives us:
+Substituting the mixture formulation for $$ p_{ref}(y \vert x) $$ and performing a little more algebra gives us:
 
 $$
 p_\theta(y|x)=\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)+\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)
@@ -95,11 +95,11 @@ as Lemma 1 states.
 
 For Theorem 2, we assumed $$ r(y;x) $$ was positively correlated with $$ p_\mathcal{A}(y|x) $$ and negatively correlated with $$ p_\mathcal{U}(y|x) $$. Since $$ Z(x) $$ and $$ \alpha(x) $$ are constants with respect to $$ y $$, $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ are clearly monotonic functions of $$ r(y;x) $$, and as a result, the correlation properties are preserved: $$ \alpha_\mathcal{A}(y;x) $$ is positively correlated with $$ p_\mathcal{A}(y|x) $$, and $$ \alpha_\mathcal{U}(y;x) $$ is negatively correlated with $$ p_\mathcal{U}(y|x) $$.
 
-Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\bullet | x) = \supp p_{ref}(\bullet | x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\bullet | x) $$, and use the correlation properties:
+Notice that finiteness of $$ r $$ implies $$ e^{r(y;x)/\beta} > 0 $$ everywhere, so the output distribution of $$ \theta $$ must have nonzero probability for any output in $$ \supp p_{ref} $$. Therefore, $$ \supp p_\theta(\cdot | x) = \supp p_{ref}(\cdot | x) $$. Consider the expectations of $$ \alpha_\mathcal{A}(y;x) $$ and $$ \alpha_\mathcal{U}(y;x) $$ over a uniform distribution over (WLOG) $$ \supp p_{\theta}(\cdot | x) $$, and use the correlation properties:
 
 $$
 \begin{align*}
-E_{y \in \unif(\supp p_{\theta}(\bullet | x))}[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)] &> E_y[\alpha_\mathcal{A}(y;x)]E_y[p_\mathcal{A}(y|x)] \\
+E_{y \in \unif(\supp p_{\theta}(\cdot | x))}[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)] &> E_y[\alpha_\mathcal{A}(y;x)]E_y[p_\mathcal{A}(y|x)] \\
 &= \frac{1}{Z(x)}\alpha(x)E_y[e^{r(y;x)/\beta}]E_y[p_\mathcal{A}(y|x)].
 \end{align*}
 $$
@@ -111,7 +111,7 @@ E_y[\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)] &< E_y[\alpha_\mathcal{U}(y;x)]E_
 \end{align*}
 $$
 
-(For the sake of brevity, we mostly omit writing the distribution over which the expectation is taken; for the rest of the proof, $$ E_y[\bullet] $$ is shorthand for $$ E_{y \in \unif(\supp p_{\theta}(\bullet | x))}[\bullet] $$.) The $$ E_y[e^{r(y;x)/\beta}] $$ and partition function terms vanish upon dividing the inequalities:
+(For the sake of brevity, we mostly omit writing the distribution over which the expectation is taken; for the rest of the proof, $$ E_y[\cdot] $$ is shorthand for $$ E_{y \in \unif(\supp p_{\theta}(\cdot | x))}[\cdot] $$.) The $$ E_y[e^{r(y;x)/\beta}] $$ and partition function terms vanish upon dividing the inequalities:
 
 $$
 \frac{E_y[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)]}{E_y[\alpha_\mathcal{U}(y;x)p_\mathcal{U}(y|x)]} > \frac{E_y[\alpha(x)p_\mathcal{A}(y|x)]}{E_y[(1-\alpha(x))p_\mathcal{U}(y|x)]}
@@ -123,13 +123,13 @@ $$
 \frac{E_y[\alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x)]}{E_y[p_\theta(y|x)]} > \frac{E_y[\alpha(x)p_\mathcal{A}(y|x)]}{E_y[p_{ref}(y|x)]}
 $$
 
-Finally, we multiply all expectations by $$ \card(\supp p_\theta(\bullet | x)) $$. Using the property that
+Finally, we multiply all expectations by $$ \card(\supp p_\theta(\cdot | x)) $$. Using the property that
 
 $$
-\card(\supp p) \bullet E_{y \in \unif(\supp p)}[p(x)] = 1
+\card(\supp p) \cdot E_{y \in \unif(\supp p)}[p(x)] = 1
 $$
 
-for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\bullet | x) = \supp p_{ref}(\bullet | x) $$, we see that the expectations of  $$ p_\theta(y|x) $$ and $$ p_{ref}(y|x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ by $$ \card(\supp p_\theta(\bullet | x)) $$ gives the total probability mass. We recover:
+for any discrete probability distribution $$ p $$, along with our earlier observation that $$ \supp p_\theta(\cdot | x) = \supp p_{ref}(\cdot | x) $$, we see that the expectations of  $$ p_\theta(y|x) $$ and $$ p_{ref}(y|x) $$ vanish. On the other hand, multiplying the expectation of $$ \alpha_\mathcal{A}(y;x)p_\mathcal{A}(y|x) $$ by $$ \card(\supp p_\theta(\cdot | x)) $$ gives the total probability mass. We recover:
 
 $$
 \TPM(\mathcal{A};x) > \alpha(x) \;\;\;\;\;\;\;\; \text{and likewise, } \TPM(\mathcal{U};x) < (1-\alpha(x)).
